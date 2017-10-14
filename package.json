@@ -1,0 +1,49 @@
+{
+  "name": "nx-webpack",
+  "version": "1.0.0",
+  "description": "学习webpack打包的练习总结仓库",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./node_modules/.bin/webpack-dev-server --config ./webpack.config.js --env.dev --host 127.0.0.1 --port 9000",
+    "build": "node ./node_modules/.bin/webpack --config ./webpack.config.js --env.prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nc-theone/webpack.git"
+  },
+  "keywords": [
+    "webpack",
+    "optimize",
+    "learning"
+  ],
+  "author": "nc-theone",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nc-theone/webpack/issues"
+  },
+  "homepage": "https://github.com/nc-theone/webpack#readme",
+  "devDependencies": {
+    "autoprefixer": "^7.1.5",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "extract-text-webpack-plugin": "^3.0.1",
+    "file-loader": "^1.1.5",
+    "image-webpack-loader": "^3.4.2",
+    "less-loader": "^4.0.5",
+    "nyan-progress-webpack-plugin": "^1.2.0",
+    "precss": "^2.0.0",
+    "uglifyjs-webpack-plugin": "^1.0.0-beta.3",
+    "webpack": "^3.7.1",
+    "webpack-dev-server": "^2.9.1",
+    "webpack-uglify-parallel": "^0.1.4"
+  }
+}
