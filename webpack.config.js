@@ -24,7 +24,7 @@ module.exports = function(env) {
   //     loader: 'babel-loader',
   //     options: {
   //       cacheDirectory: true,
-  //       presets: ['react', 'es2015', 'stage-0', '@alife/babel-preset-fusion'],
+  //       presets: ['react', 'es2015', 'stage-0'],
   //       plugins: [
   //         'transform-decorators-legacy'
   //       ]
