@@ -8,7 +8,10 @@ var autoprefixer = require('autoprefixer');
 
 var os = require('os');
 
+// 开发插件
 var NyanProgressPlugin = require('nyan-progress-webpack-plugin');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// 打包插件
 var UglifyJsParallelPlugin = require('webpack-uglify-parallel');
 // var UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
@@ -239,6 +242,7 @@ module.exports = function(env) {
 
   if (isDev) {
     config.plugins.push(new webpack.SourceMapDevToolPlugin({}));
+    config.plugins.push(new BundleAnalyzerPlugin());
   } else {
     config.plugins.push(
       // new webpack.optimize.UglifyJsPlugin({

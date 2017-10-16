@@ -43,6 +43,7 @@
     "precss": "^2.0.0",
     "uglifyjs-webpack-plugin": "^1.0.0-beta.3",
     "webpack": "^3.7.1",
+    "webpack-bundle-analyzer": "^2.9.0",
     "webpack-dev-server": "^2.9.1",
     "webpack-uglify-parallel": "^0.1.4"
   }
