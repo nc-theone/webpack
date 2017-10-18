@@ -41,13 +41,24 @@ module.exports = function(env) {
 
   // https://webpack.js.org/configuration/
   var config = {
+    // the home directory for webpack
+    // the entry and module.rules.loader option is resolved relative to this directory
+    context: __dirname,
     // string | object | array
-    entry: './src/index',
+    entry: {
+      'pages/home/index': './src/pages/home/index.js'
+    },
     output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: 'bundle.js',
-      publicPath: '/dist/',
+      // 在开发阶段 一定要指定为一个相对路径 否则会导致html中的依赖资源加载失败
+      path: isDev ? '/dist/' : path.resolve(__dirname, 'dist'),
+      filename: '[name].js',
+      // 和path的配置 解释相同
+      publicPath: isDev ? '/dist/' : path.resolve(__dirname, 'dist'),
       chunkFilename: '[chunkhash].js'
+    },
+    externals: {
+      react: 'React',
+      'react-dom': 'ReactDOM'
     },
     // 模块的编译规则 针对不同的文件后缀 使用不同的加载器
     module: {
@@ -61,11 +72,14 @@ module.exports = function(env) {
               loader: 'babel-loader',
               options: {
                 cacheDirectory: true,
-                presets: ['react', 'es2015', 'stage-0'],
+                // 禁用es6-module -> commonjs-module 这样webpack2可以使用tree-shaking
+                // https://www.zhihu.com/question/41922432
+                presets: ['react', 'stage-0', ['es2015', { modules: false }]],
                 plugins: ['transform-decorators-legacy']
               }
             }
           ],
+          // 只有一个loader的话 直接使用loader字段进行配置
           // loader: 'babel-loader', // 用来编译指定的文件
           // options: { // loader配置 具体可以查看每一个loader支持的配置
           //   cacheDirectory: true,
@@ -73,6 +87,7 @@ module.exports = function(env) {
           //   plugins: ['transform-decorators-legacy']
           // },
           // 这里千万不要设置啊 否则会导致二级引用不会被编译
+          // 如果这里设置为[] 则 import * as a from 'utils/date'; utils/date.js 的语法不会被转换
           // include: [], // 这个值 一般不设置的
           // enforce: '', // pre | post
           exclude: [
@@ -90,7 +105,7 @@ module.exports = function(env) {
               {
                 loader: 'postcss-loader',
                 options: {
-                  plugins: loader => [precss, autpprefixer]
+                  plugins: loader => [precss, autoprefixer]
                 }
               },
               {
@@ -198,17 +213,19 @@ module.exports = function(env) {
     },
     // 开发工具
     // devtool: 'source-map', // inlint-source-map | eval-source-map | cheap-source-map
-    // the home directory for webpack
-    // the entry and module.rules.loader option is resolved relative to this directory
-    context: __dirname,
     devServer: {
       // proxy: { // proxy URLs to backend development server
       //   '/api': 'http://localhost:3000'
       // },
-      contentBase: path.join(__dirname, 'public'), // boolean | string | array, static file location
+      // 可以直接这么访问了 http://127.0.0.1:9000/src/demos/index.html
+      // 之所以这是为 ./ 是为了在*.html中引用的时候 可以指定到 /node_modules/ 目录
+      // 建议直接设置为 ./ 如果设置为 ./src/
+      // 那么页面的访问链接将减少一级 变成 http://127.0.0.1:9000/demos/index.html
+      contentBase: isDev ? './' : path.join(__dirname, './'), // boolean | string | array, static file location
       compress: true, // enable gzip compression
       historyApiFallback: true, // true for index.html upon 404, object for multiple paths
-      hot: true, // hot module replacement. Depends on HotModuleReplacementPlugin
+      // 没有hot-replacement-plugin的话 该项不要设置为true
+      hot: false, // hot module replacement. Depends on HotModuleReplacementPlugin
       https: false, // true for self-signed, object for cert authority
       noInfo: true, // only errors & warns on hot reload
     },
@@ -277,7 +294,7 @@ module.exports = function(env) {
         uglifyOptions: {
           ecma: 7
         },
-        // beautify: true // true 表示会格式化压缩后的代码 多出很多空格和换行
+        beautify: true // true 表示会格式化压缩后的代码 多出很多空格和换行
       })
       // 查找相等或近似的模块，避免在最终生成的文件中出现重复的模块。***webpack2中已经移除了这些模块
       // new webpack.optimize.DedupePlugin()

@@ -5,3 +5,11 @@
 export default () => {
   return new Date().getTime();
 };
+
+export function getYear() {
+  return '2017';
+}
+
+export function getMonth() {
+  return '10';
+}
