@@ -281,20 +281,30 @@ module.exports = function(env) {
       //     cache: true,
       //     workers: os.cpus().length
       //   },
+      //   output: {
+      //     comments: true
+      //   },
       //   uglifyOptions: {
       //     ecma: 7
       //   },
       //   mangle: {
       //     except: ['$', 'exports', 'require']
+      //   },
+      //   compress: {
+      //     warning: true,
+      //     drop_console: true
       //   }
       // })
       new UglifyJsParallelPlugin({
         workers: os.cpus().length, // usually having as many workers as cpu cores gives good results
         // other uglify options
+        output: {
+          // comments: true
+        },
         uglifyOptions: {
           ecma: 7
         },
-        beautify: true // true 表示会格式化压缩后的代码 多出很多空格和换行
+        // beautify: true // true 表示会格式化压缩后的代码 多出很多空格和换行
       })
       // 查找相等或近似的模块，避免在最终生成的文件中出现重复的模块。***webpack2中已经移除了这些模块
       // new webpack.optimize.DedupePlugin()
