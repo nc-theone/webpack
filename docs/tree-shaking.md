@@ -13,30 +13,30 @@
 
 - `date.js`
 
-```javascript
-// getYear
-// 单独的function抛出方式 如果不被用到 那么使用了tree-shaking以及uglify之后 该方法会被删除
-export function getYear() {
-  return 'year';
-}
-// getMonth
-export function getMonth() {
-  return 'month';
-}
+  ```javascript
+  // getYear
+  // 单独的function抛出方式 如果不被用到 那么使用了tree-shaking以及uglify之后 该方法会被删除
+  export function getYear() {
+    return 'year';
+  }
+  // getMonth
+  export function getMonth() {
+    return 'month';
+  }
 
-function getMinutes() {
-  return 'minutes';
-}
+  function getMinutes() {
+    return 'minutes';
+  }
 
-function getSeconds() {
-  return 'seconds';
-}
+  function getSeconds() {
+    return 'seconds';
+  }
 
-// 如果采用这种方式，即使在业务代码中没有用到 getSeconds 那么该方法也会被打包
-// 正确的方式 可以修改为 export { getMinutes, getSeconds }
-export default { getMinutes, getSeconds }
+  // 如果采用这种方式，即使在业务代码中没有用到 getSeconds 那么该方法也会被打包
+  // 正确的方式 可以修改为 export { getMinutes, getSeconds }
+  export default { getMinutes, getSeconds }
 
-```
+  ```
 
 ## 建议
 
