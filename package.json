@@ -7,9 +7,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./node_modules/.bin/webpack-dev-server --config ./webpack.config.js --env.dev --host 127.0.0.1 --port 9000",
-    "build": "node ./node_modules/.bin/webpack --config ./webpack.config.js --env.prod"
+    "build": "node ./node_modules/.bin/webpack --config ./webpack.config.js --env.prod",
+    "json": "node ./node_modules/.bin/webpack --profile --json"
   },
   "repository": {
     "type": "git",

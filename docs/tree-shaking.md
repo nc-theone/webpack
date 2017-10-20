@@ -40,16 +40,17 @@ export default { getMinutes, getSeconds }
 
 ## 建议
 
-- 使用webpack2及以上版本
+- 使用webpack2及以上版本，低版本中是没有tree-shaking的
 - `babel-preset-es2015`中，需要添加下述配置
-```
-{ module: false }
-```
+  ```
+  { module: false }
+  ```
+
 - utils中的方法，建议直接使用`export function () => {}`的方式
-- 如果一定要抛出default字段，请不要抛出一个Object，比如下面的使用方式是不建议的，因为在压缩的时候，无法删除没被引用的代码
-```
-export default {
-  func1: func1,
-  func2: func2
-};
-```
+- 如果一定要抛出default字段，请不要抛出一个Object，比如下面的使用方式是不建议的
+  ```
+  export default { // 请删除这里的 default 字段
+    func1: func1,
+    func2: func2
+  };
+  ```
