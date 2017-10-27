@@ -112,7 +112,7 @@ module.exports = function(env) {
                 loader: 'fast-sass-loader',
                 options: {
                   includePaths: [
-                    path.join(__dirname, 'srx')
+                    path.join(__dirname, 'src')
                   ]
                 }
               }
