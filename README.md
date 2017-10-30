@@ -1,6 +1,9 @@
 # webpack
 record of my learning process
 
+## 运行环境
+
+- node >= 6.0.0
 
 # 学习资料
 
