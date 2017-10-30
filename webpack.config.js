@@ -60,6 +60,20 @@ module.exports = function(env) {
       react: 'React',
       'react-dom': 'ReactDOM'
     },
+    // 打包&编译时的兼容处理
+    resolve: {
+      // modules: [ 'node_modules' ], // 不太清楚是怎么用的
+      // import date from 'utils/date' 会自动进行后缀拼接
+      // 如果不带后缀 会自动 进行下面的文件查找
+      // utils/date.js  utils/date.jsx utils/date.json 知道找到对应的文件
+      // 建议引入的时候 直接添加后缀 减少解析和比对的时间
+      extensions: ['.js', '.jsx', '.json'],
+      alias: {
+        components: path.resolve(__dirname, './src/components/'), // 组件目录别名
+        utils: path.resolve(__dirname, './src/utils/'),
+        styles: path.resolve(__dirname, './src/styles')
+      }
+    },
     // 模块的编译规则 针对不同的文件后缀 使用不同的加载器
     module: {
       rules: [
@@ -98,10 +112,8 @@ module.exports = function(env) {
         {
           test: /\.scss$/,
           use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
             // use: 'raw-loader!postcss-loader!fast-sass-loader?includePaths[]=' + path.join(__dirname, 'src')
             use: [
-              'raw-loader',
               {
                 loader: 'postcss-loader',
                 options: {
@@ -122,9 +134,7 @@ module.exports = function(env) {
         {
           test: /\.less$/,
           use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
             use: [
-              'raw-loader',
               {
                 loader: 'postcss-loader',
                 options: {
@@ -134,6 +144,10 @@ module.exports = function(env) {
               'less-loader'
             ]
           })
+        },
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader']
         },
         {
           test: /\.(gif|png|jpe?g|svg)$/i, // 图片的压缩处理 暂时无用
@@ -200,16 +214,6 @@ module.exports = function(env) {
       // wrappedContextRecursive: true,
       // wrappedContextCritical: false,
       // // specifies default behavior for dynamic requests
-    },
-    // 打包&编译时的兼容处理
-    resolve: {
-      // modules: [ 'node_modules' ], // 不太清楚是怎么用的
-      extensions: ['.js', '.jsx', 'json'], // 任何loader识别的文件后缀 都可以拼接此数组进行二次识别
-      alias: {
-        components: path.resolve(__dirname, './src/components/'), // 组件目录别名
-        utils: path.resolve(__dirname, './src/utils/'),
-        styles: path.resolve(__dirname, './src/styles')
-      }
     },
     // 开发工具
     // devtool: 'source-map', // inlint-source-map | eval-source-map | cheap-source-map
@@ -300,6 +304,9 @@ module.exports = function(env) {
         // other uglify options
         output: {
           // comments: true
+        },
+        compress: {
+          warnings: false // 禁止打包过程中 在终端输出warning信息
         },
         uglifyOptions: {
           ecma: 7

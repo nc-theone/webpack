@@ -3,7 +3,7 @@ import React from 'react';
 
 import ReactDOM from 'react-dom';
 
-import getNow, { getYear, getMinutes } from 'utils/date';
+import getNow, { getYear, getMinutes } from 'utils/date.js';
 
 import './index.scss';
 
