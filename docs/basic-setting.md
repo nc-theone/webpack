@@ -21,6 +21,7 @@
 > 这里给出我自己在用的webpack打包配置，并对其中每一个配置项进行详细的解释
 
 ```javascript
+
 var webpack = require('webpack');
 var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -38,8 +39,13 @@ var UglifyJsParallelPlugin = require('webpack-uglify-parallel');
 // var UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 
 // 区分开发状态和发布状态
+
 module.exports = function(env) {
-  var isDev = env.dev === true;
+  var isDev = env && env.dev && env.dev === true;
+  var isAnalysis = env && env.analysis && env.analysis === true;
+
+  isAnalysis && (isDev = true);
+
   // 待优化
   // Happypack 多进程来加速代码构建
   // new HappyPack({
@@ -81,6 +87,20 @@ module.exports = function(env) {
       react: 'React',
       'react-dom': 'ReactDOM'
     },
+    // 打包&编译时的兼容处理
+    resolve: {
+      // modules: [ 'node_modules' ], // 不太清楚是怎么用的
+      // import date from 'utils/date' 会自动进行后缀拼接
+      // 如果不带后缀 会自动 进行下面的文件查找
+      // utils/date.js  utils/date.jsx utils/date.json 知道找到对应的文件
+      // 建议引入的时候 直接添加后缀 减少解析和比对的时间
+      extensions: ['.js', '.jsx', '.json'],
+      alias: {
+        components: path.resolve(__dirname, './src/components/'), // 组件目录别名
+        utils: path.resolve(__dirname, './src/utils/'),
+        styles: path.resolve(__dirname, './src/styles')
+      }
+    },
     // 模块的编译规则 针对不同的文件后缀 使用不同的加载器
     module: {
       rules: [
@@ -119,10 +139,8 @@ module.exports = function(env) {
         {
           test: /\.scss$/,
           use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
             // use: 'raw-loader!postcss-loader!fast-sass-loader?includePaths[]=' + path.join(__dirname, 'src')
             use: [
-              'raw-loader',
               {
                 loader: 'postcss-loader',
                 options: {
@@ -133,7 +151,7 @@ module.exports = function(env) {
                 loader: 'fast-sass-loader',
                 options: {
                   includePaths: [
-                    path.join(__dirname, 'srx')
+                    path.join(__dirname, 'src')
                   ]
                 }
               }
@@ -143,9 +161,7 @@ module.exports = function(env) {
         {
           test: /\.less$/,
           use: ExtractTextPlugin.extract({
-            fallback: 'style-loader',
             use: [
-              'raw-loader',
               {
                 loader: 'postcss-loader',
                 options: {
@@ -155,6 +171,10 @@ module.exports = function(env) {
               'less-loader'
             ]
           })
+        },
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader']
         },
         {
           test: /\.(gif|png|jpe?g|svg)$/i, // 图片的压缩处理 暂时无用
@@ -188,63 +208,17 @@ module.exports = function(env) {
             }
           ]
         }
-        // { oneOf: [ /* rules */ ] },
-        // // only use one of these nested rules
-        //
-        // { rules: [ /* rules */ ] },
-        // // use all of these nested rules (combine with conditions to be useful)
-        //
-        // { resource: { and: [ /* conditions */ ] } },
-        // // matches only if all conditions are matched
-        //
-        // { resource: { or: [ /* conditions */ ] } },
-        // { resource: [ /* conditions */ ] },
-        // // matches if any condition is matched (default for arrays)
-        //
-        // { resource: { not: /* condition */ } }
-        // // matches if the condition is not matched
       ]
-      // noParse: [
-      //   /special-library\.js$/
-      // ],
-      // // do not parse this module
-      //
-      // unknownContextRequest: ".",
-      // unknownContextRecursive: true,
-      // unknownContextRegExp: /^\.\/.*$/,
-      // unknownContextCritical: true,
-      // exprContextRequest: ".",
-      // exprContextRegExp: /^\.\/.*$/,
-      // exprContextRecursive: true,
-      // exprContextCritical: true,
-      // wrappedContextRegExp: /.*/,
-      // wrappedContextRecursive: true,
-      // wrappedContextCritical: false,
-      // // specifies default behavior for dynamic requests
     },
-    // 打包&编译时的兼容处理
-    resolve: {
-      // modules: [ 'node_modules' ], // 不太清楚是怎么用的
-      extensions: ['.js', '.jsx', 'json'], // 任何loader识别的文件后缀 都可以拼接此数组进行二次识别
-      alias: {
-        components: path.resolve(__dirname, './src/components/'), // 组件目录别名
-        utils: path.resolve(__dirname, './src/utils/'),
-        styles: path.resolve(__dirname, './src/styles')
-      }
-    },
-    // 开发工具
-    // devtool: 'source-map', // inlint-source-map | eval-source-map | cheap-source-map
     devServer: {
-      // proxy: { // proxy URLs to backend development server
-      //   '/api': 'http://localhost:3000'
-      // },
       // 可以直接这么访问了 http://127.0.0.1:9000/src/demos/index.html
       // 之所以这是为 ./ 是为了在*.html中引用的时候 可以指定到 /node_modules/ 目录
       // 建议直接设置为 ./ 如果设置为 ./src/
       // 那么页面的访问链接将减少一级 变成 http://127.0.0.1:9000/demos/index.html
       contentBase: isDev ? './' : path.join(__dirname, './'), // boolean | string | array, static file location
       compress: true, // enable gzip compression
-      historyApiFallback: true, // true for index.html upon 404, object for multiple paths
+      // 这里一般设置为false 否则 访问类似于 http://127.0.0.1:9000/src/demos/ 会直接报错
+      historyApiFallback: false, // true for index.html upon 404, object for multiple paths
       // 没有hot-replacement-plugin的话 该项不要设置为true
       hot: false, // hot module replacement. Depends on HotModuleReplacementPlugin
       https: false, // true for self-signed, object for cert authority
@@ -278,9 +252,12 @@ module.exports = function(env) {
     ]
   };
 
+  if (isAnalysis) {
+    config.plugins.push(new BundleAnalyzerPlugin());
+  }
+
   if (isDev) {
     config.plugins.push(new webpack.SourceMapDevToolPlugin({}));
-    config.plugins.push(new BundleAnalyzerPlugin());
   } else {
     config.plugins.push(
       new UglifyJsParallelPlugin({
@@ -289,14 +266,14 @@ module.exports = function(env) {
         output: {
           // comments: true
         },
+        compress: {
+          warnings: false // 禁止打包过程中 在终端输出warning信息
+        },
         uglifyOptions: {
           ecma: 7
         },
         // beautify: true // true 表示会格式化压缩后的代码 多出很多空格和换行
       })
-      // 查找相等或近似的模块，避免在最终生成的文件中出现重复的模块。***webpack2中已经移除了这些模块
-      // new webpack.optimize.DedupePlugin()
-      // new webpack.optimize.OccurenceOrderPlugin()
     );
   }
   return config;

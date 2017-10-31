@@ -18,7 +18,11 @@ var UglifyJsParallelPlugin = require('webpack-uglify-parallel');
 // 区分开发状态和发布状态
 
 module.exports = function(env) {
-  var isDev = env.dev === true;
+  var isDev = env && env.dev && env.dev === true;
+  var isAnalysis = env && env.analysis && env.analysis === true;
+
+  isAnalysis && (isDev = true);
+
   // 待优化
   // Happypack 多进程来加速代码构建
   // new HappyPack({
@@ -262,9 +266,12 @@ module.exports = function(env) {
     ]
   };
 
+  if (isAnalysis) {
+    config.plugins.push(new BundleAnalyzerPlugin());
+  }
+
   if (isDev) {
     config.plugins.push(new webpack.SourceMapDevToolPlugin({}));
-    config.plugins.push(new BundleAnalyzerPlugin());
   } else {
     config.plugins.push(
       // new webpack.optimize.UglifyJsPlugin({
@@ -314,9 +321,6 @@ module.exports = function(env) {
         },
         // beautify: true // true 表示会格式化压缩后的代码 多出很多空格和换行
       })
-      // 查找相等或近似的模块，避免在最终生成的文件中出现重复的模块。***webpack2中已经移除了这些模块
-      // new webpack.optimize.DedupePlugin()
-      // new webpack.optimize.OccurenceOrderPlugin()
     );
   }
   return config;

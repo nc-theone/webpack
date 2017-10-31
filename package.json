@@ -9,6 +9,7 @@
   "scripts": {
     "start": "./node_modules/.bin/webpack-dev-server --config ./webpack.config.js --env.dev --host 127.0.0.1 --port 9000",
     "build": "./node_modules/.bin/webpack --config ./webpack.config.js --env.prod",
+    "analysis": "./node_modules/.bin/webpack-dev-server --config ./webpack.config.js --env.analysis --host 127.0.0.1 --port 9000",
     "json": "./node_modules/.bin/webpack --profile --json"
   },
   "repository": {
