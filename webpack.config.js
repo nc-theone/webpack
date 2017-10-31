@@ -227,7 +227,8 @@ module.exports = function(env) {
       // 那么页面的访问链接将减少一级 变成 http://127.0.0.1:9000/demos/index.html
       contentBase: isDev ? './' : path.join(__dirname, './'), // boolean | string | array, static file location
       compress: true, // enable gzip compression
-      historyApiFallback: true, // true for index.html upon 404, object for multiple paths
+      // 这里一般设置为false 否则 访问类似于 http://127.0.0.1:9000/src/demos/ 会直接报错
+      historyApiFallback: false, // true for index.html upon 404, object for multiple paths
       // 没有hot-replacement-plugin的话 该项不要设置为true
       hot: false, // hot module replacement. Depends on HotModuleReplacementPlugin
       https: false, // true for self-signed, object for cert authority
