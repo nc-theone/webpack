@@ -57,6 +57,8 @@ module.exports = function(env) {
       path: isDev ? '/dist/' : path.resolve(__dirname, 'dist'),
       filename: '[name].js',
       // 和path的配置 解释相同
+      // 这个配置 很重要 直接影响了 file-loader等编译出来的文件可访问位置
+      // 会挂载到 __webpack_require__.p 属性上面 可以设置为cdn地址
       publicPath: isDev ? '/dist/' : path.resolve(__dirname, 'dist'),
       chunkFilename: '[chunkhash].js'
     },
@@ -95,7 +97,7 @@ module.exports = function(env) {
                 presets: ['react', 'stage-0', ['es2015', { modules: false }]],
                 plugins: [
                   'transform-decorators-legacy',  // 支持 @
-                  'transform-class-properties'    // 支持 onClick = () => {} 
+                  'transform-class-properties'    // 支持 onClick = () => {}
                 ]
               }
             }
@@ -157,37 +159,48 @@ module.exports = function(env) {
           use: ['style-loader', 'css-loader']
         },
         {
-          test: /\.(gif|png|jpe?g|svg)$/i, // 图片的压缩处理 暂时无用
+          test: /\.(png|jpg|gif)$/,
           use: [
             {
-              loader: 'file-loader',
-              options: {}
-            },
-            {
-              loader: 'image-webpack-loader',
+              loader: 'url-loader',
               options: {
-                gifsicle: {
-                  interlaced: false,
-                },
-                optipng: {
-                  optimizationLevel: 7,
-                },
-                pngquant: {
-                  quality: '65-90',
-                  speed: 4
-                },
-                mozjpeg: {
-                  progressive: true,
-                  quality: 65
-                },
-                // Specifying webp here will create a WEBP version of your JPG/PNG images
-                webp: {
-                  quality: 75
-                }
+                limit: 30 * 1024
               }
             }
           ]
-        }
+        },
+        // {
+        //   test: /\.(gif|png|jpe?g|svg)$/i, // 图片的压缩处理 暂时无用
+        //   use: [
+        //     {
+        //       loader: 'file-loader',
+        //       options: {}
+        //     },
+        //     {
+        //       loader: 'image-webpack-loader', // 对一些图片进行压缩处理 并使用file-loader 将处理之后的图片导入 output.publicPath目录下 文件名一般是一个随机数字
+        //       options: {
+        //         gifsicle: {
+        //           interlaced: false,
+        //         },
+        //         optipng: {
+        //           optimizationLevel: 7,
+        //         },
+        //         pngquant: {
+        //           quality: '65-90',
+        //           speed: 4
+        //         },
+        //         mozjpeg: {
+        //           progressive: true,
+        //           quality: 65
+        //         },
+        //         // Specifying webp here will create a WEBP version of your JPG/PNG images
+        //         webp: {
+        //           quality: 75
+        //         }
+        //       }
+        //     }
+        //   ]
+        // }
         // { oneOf: [ /* rules */ ] },
         // // only use one of these nested rules
         //
