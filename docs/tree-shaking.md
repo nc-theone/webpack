@@ -47,7 +47,17 @@
   ```
 
 - utils中的方法，建议直接使用`export function () => {}`的方式
-- 如果一定要抛出default字段，请不要抛出一个Object，比如下面的使用方式是不建议的
+- 如果一定要抛出一个Object，可以这么使用
+
+  ```
+  export {
+    getYear, // 这里不能是表达式 一定要是一个变量
+    getMonth
+  }
+  ```
+
+  - `强烈不建议在抛出的对象前面 添加default`
+
   ```
   export default { // 请删除这里的 default 字段
     func1: func1,
