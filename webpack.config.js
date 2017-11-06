@@ -18,8 +18,12 @@ var UglifyJsParallelPlugin = require('webpack-uglify-parallel');
 // 区分开发状态和发布状态
 
 module.exports = function(env) {
+  // 是否为开发模式
   var isDev = env && env.dev && env.dev === true;
+  // 是否为代码分析模式
   var isAnalysis = env && env.analysis && env.analysis === true;
+  // 是否为压缩模式
+  var nocompress = env && env.nocompress && env.nocompress === true;
 
   isAnalysis && (isDev = true);
 
@@ -289,55 +293,57 @@ module.exports = function(env) {
   if (isDev) {
     config.plugins.push(new webpack.SourceMapDevToolPlugin({}));
   } else {
-    config.plugins.push(
-      // new webpack.optimize.UglifyJsPlugin({
-      //   compress: {
-      //     unused: true,
-      //     dead_code: true,
-      //     warnings: false
-      //   },
-        // mangle: {
-        //   except: ['$', 'exports', 'require']
-        // },
-      //   output: {
-      //     ascii_only: true
-      //   },
-      //
-      // })
-      // new UglifyJSPlugin({
-      //   parallel: {
-      //     cache: true,
-      //     workers: os.cpus().length
-      //   },
-      //   output: {
-      //     comments: true
-      //   },
-      //   uglifyOptions: {
-      //     ecma: 7
-      //   },
-      //   mangle: {
-      //     except: ['$', 'exports', 'require']
-      //   },
-      //   compress: {
-      //     warning: true,
-      //     drop_console: true
-      //   }
-      // })
-      new UglifyJsParallelPlugin({
-        workers: os.cpus().length, // usually having as many workers as cpu cores gives good results
-        // other uglify options
-        output: {
-          // comments: true
-        },
-        compress: {
-          warnings: false // 禁止打包过程中 在终端输出warning信息
-        },
-        uglifyOptions: {
-          ecma: 7
-        },
-        // beautify: true // true 表示会格式化压缩后的代码 多出很多空格和换行
-      })
-    );
+    if (!nocompress) {
+      config.plugins.push(
+        // new webpack.optimize.UglifyJsPlugin({
+        //   compress: {
+        //     unused: true,
+        //     dead_code: true,
+        //     warnings: false
+        //   },
+          // mangle: {
+          //   except: ['$', 'exports', 'require']
+          // },
+        //   output: {
+        //     ascii_only: true
+        //   },
+        //
+        // })
+        // new UglifyJSPlugin({
+        //   parallel: {
+        //     cache: true,
+        //     workers: os.cpus().length
+        //   },
+        //   output: {
+        //     comments: true
+        //   },
+        //   uglifyOptions: {
+        //     ecma: 7
+        //   },
+        //   mangle: {
+        //     except: ['$', 'exports', 'require']
+        //   },
+        //   compress: {
+        //     warning: true,
+        //     drop_console: true
+        //   }
+        // })
+        new UglifyJsParallelPlugin({
+          workers: os.cpus().length, // usually having as many workers as cpu cores gives good results
+          // other uglify options
+          output: {
+            // comments: true
+          },
+          compress: {
+            warnings: false // 禁止打包过程中 在终端输出warning信息
+          },
+          uglifyOptions: {
+            ecma: 7
+          },
+          // beautify: true // true 表示会格式化压缩后的代码 多出很多空格和换行
+        })
+      );
+    }
   }
   return config;
 };
