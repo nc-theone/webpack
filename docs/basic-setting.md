@@ -139,7 +139,9 @@ module.exports = function(env) {
         {
           test: /\.scss$/,
           use: ExtractTextPlugin.extract({
+            // webpack1 中一定要如此配置
             // use: 'raw-loader!postcss-loader!fast-sass-loader?includePaths[]=' + path.join(__dirname, 'src')
+            // webpack2 可以如下配置 不添加raw-loader的配置
             use: [
               {
                 loader: 'postcss-loader',
@@ -287,3 +289,20 @@ module.exports = function(env) {
 - 然后在下述的任何一个站点，上传上述命令生成的json文件
   - https://github.com/webpack/analyse
   - http://alexkuz.github.io/webpack-chart/
+
+## 注意点
+
+- webpack1 & webpack2不同之处
+- [用法不同之处](https://github.com/webpack-contrib/extract-text-webpack-plugin/blob/webpack-1/README.md)
+- `loader配置不同之处`
+
+```javascript
+{
+  test: /\.scss$/,
+  // webpack1中 移动要配置 raw-loader + fast-sass-loader 两个loader 不然 import './index.scss'; 的提取方式会报错
+  // webpack2中 可以不配置 raw-loader
+  use: 'raw-loader!postcss-loader!fast-sass-loader?includePaths[]=' + path.join(__dirname, 'src')
+}
+```
+
+---
