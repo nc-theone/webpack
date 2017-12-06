@@ -8,3 +8,4 @@ mods/.sass-cache/
 .vscode
 build/
 stats.json
+npm-debug.log

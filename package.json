@@ -13,7 +13,9 @@
     "happy-build": "./node_modules/.bin/webpack --config ./webpack.happypack.config.js --env.prod",
     "bnc": "./node_modules/.bin/webpack --config ./webpack.config.js --env.nocompress",
     "analysis": "./node_modules/.bin/webpack-dev-server --config ./webpack.config.js --env.analysis --host 0.0.0.0 --port 9000",
-    "json": "./node_modules/.bin/webpack --profile --json"
+    "json": "./node_modules/.bin/webpack --profile --json",
+    "loader-build": "./node_modules/.bin/webpack --config ./config/webpack.loader.config.js",
+    "lb": "./node_modules/.bin/webpack --config ./config/webpack.loader.config.js"
   },
   "repository": {
     "type": "git",
