@@ -1,4 +1,5 @@
 
+var webpack = require('webpack');
 var path = require('path');
 var pwd = process.cwd();
 
@@ -26,7 +27,11 @@ module.exports = function(env) {
           ]
         }
       ]
-    }
+    },
+    plugins: [
+      // 利用 webpack 3 的新特性 提升作用域 减少代码体积 提升代码执行性能
+      new webpack.optimize.ModuleConcatenationPlugin()
+    ]
   };
 
   return config;

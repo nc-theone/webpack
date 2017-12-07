@@ -1,7 +1,8 @@
 
 import React from 'react';
-
 import ReactDOM from 'react-dom';
+
+import GoodsList from 'components/goods-list/';
 
 import getNow, { getYear, getMinutes } from 'utils/date.js';
 
@@ -15,7 +16,11 @@ class Demo extends React.Component {
     console.log(getMinutes())
   }
   render() {
-    return <h1>不是吧</h1>;
+    return (
+      <div className="page-container">
+        <GoodsList />
+      </div>
+    );
   }
 }
 
