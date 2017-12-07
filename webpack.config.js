@@ -35,7 +35,7 @@ module.exports = function(env) {
   //     loader: 'babel-loader',
   //     options: {
   //       cacheDirectory: true,
-  //       presets: ['react', 'es2015', 'stage-0'],
+  //       presets: ['react', 'env', 'stage-0'],
   //       plugins: [
   //         'transform-decorators-legacy'
   //       ]
@@ -98,7 +98,7 @@ module.exports = function(env) {
                 cacheDirectory: true,
                 // 禁用es6-module -> commonjs-module 这样webpack2可以使用tree-shaking
                 // https://www.zhihu.com/question/41922432
-                presets: ['react', 'stage-0', ['es2015', { modules: false }]],
+                presets: ['react', 'stage-0', ['env', { modules: false }]],
                 plugins: [
                   'transform-decorators-legacy',  // 支持 @
                   'transform-class-properties'    // 支持 onClick = () => {}
@@ -110,7 +110,7 @@ module.exports = function(env) {
           // loader: 'babel-loader', // 用来编译指定的文件
           // options: { // loader配置 具体可以查看每一个loader支持的配置
           //   cacheDirectory: true,
-          //   presets: ['react', 'es2015', 'stage-0'],
+          //   presets: ['react', 'env', 'stage-0'],
           //   plugins: ['transform-decorators-legacy']
           // },
           // 这里千万不要设置啊 否则会导致二级引用不会被编译

@@ -31,7 +31,7 @@ const genBabelPlugin = () => {
         cacheDirectory: true,
         // 禁用es6-module -> commonjs-module 这样webpack2可以使用tree-shaking
         // https://www.zhihu.com/question/41922432
-        presets: ['react', 'stage-0', ['es2015', { modules: false }]],
+        presets: ['react', 'stage-0', ['env', { modules: false }]],
         plugins: [
           'transform-decorators-legacy',  // 支持 @
           'transform-class-properties'    // 支持 onClick = () => {}
