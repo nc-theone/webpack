@@ -25,6 +25,8 @@ entry: {
 },
 plugin: [
   new webpack.optimize.CommonsChunkPlugin({
+    // 如果vendor直接命中了entry中的某个字段 则将entry中对应的文件提取出来
+    // 如果没有命中，则会提取入口文件中共用的部分到指定的文件中去
     names: ['vendor'],
     minChunks: Infinity
   }),
