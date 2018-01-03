@@ -105,6 +105,33 @@ output: {
 - 上述配置会生成独立的入口文件，每一个文件的入口module指向`export default`抛出的对象
 - 单独的打包结果请参考第一种入口形式
 
+### 不推荐
+
+- 我不推荐同时使用下述配置(仅仅罗列差异部分)
+
+```javascript
+module: {
+  rules: [
+    {
+      test: /(\.jsx)|(\.js)$/,
+      loader: 'babel-loader',
+      presets: ['react', 'stage-0', ['env', {modules: false}]],
+      plugins: [
+        'add-module-exports'
+      ]
+    }
+  ]
+}
+```
+
+- `modules: false 不要与 add-module-exports 同时使用`，如果同时使用，会在打包出来的代码中看到下述奇怪的代码
+
+![](https://img.alicdn.com/tfs/TB1M0p0lb_I8KJjy1XaXXbsxpXa-2134-1294.png)
+
+- 1：在使用了`tree-shaking`之后，打包出来的模块的第二个入参，已经由`exports -> __wbepack_exports__`
+- 2：模块暴露的代码全都挂在`__webpack_exports__["default"]`上面
+- 3：`add-module-exports`插件插入的代码还是向`exports`上面挂载方法，但是上下文已经找不到`exports`对象了，因此执行会报错
+
 ### Q&A
 
 - 有任何问题可以提issue
