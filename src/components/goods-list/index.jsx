@@ -1,9 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 
-export default () => {
+import './index.scss';
+
+const { Fragment } = React;
+
+export default (props) => {
+  const { children } = props;
+  // const newChilds = React.Children.map(children, function(child) {
+  //   console.log(child, this);
+  // });
+  // React.Children.only(children);
   return (
-    <div className="goods-list-container">
-      这里是商品列表
-    </div>
+    <Fragment key={new Date().getTime()}>
+      <div className="title">这里是商品标题</div>
+      {children}
+    </Fragment>
   );
 };

@@ -1,3 +1,6 @@
+.goods-list-container {
+  padding: 12px;
+  background-color: aquamarine; }
 .container {
   padding: 12px;
   display: -webkit-box;

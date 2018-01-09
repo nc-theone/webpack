@@ -33,8 +33,9 @@
   },
   "homepage": "https://github.com/nc-theone/webpack#readme",
   "dependencies": {
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2"
+    "prop-types": "^15.6.0",
+    "react": "latest",
+    "react-dom": "latest"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.5",
