@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import GoodsList from 'components/goods-list/';
+import PureGoodsList from 'components/pure-component/';
 
 import getNow, { getYear, getMinutes } from 'utils/date.js';
 
@@ -20,15 +21,21 @@ class Demo extends React.Component {
   }
   render() {
     return (
-      <Fragment>
-        <GoodsList>
+      <div ref={(instance) => {console.log(instance)}}>
+        <GoodsList ref={(instance) => {
+          // stateless component ref 是不生效的
+          console.log(instance);
+        }}>
           <li className="list-item">第1个商品</li>
           <li className="list-item">第2个商品</li>
           <li className="list-item">第3个商品</li>
           <li className="list-item">第4个商品</li>
           <li className="list-item">第5个商品</li>
         </GoodsList>
-      </Fragment>
+        <PureGoodsList ref={(instance) => {
+          console.log(instance);
+        }} />
+      </div>
     );
   }
 }
