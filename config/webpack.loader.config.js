@@ -19,7 +19,7 @@ module.exports = function(env) {
           test: /\.jsc$/,
           use: [
             {
-              loader: path.resolve(pwd, './loader/multiple-html-webpack-plugin.js'),
+              loader: path.resolve(pwd, './loader/test-loader.js'),
               options: {
                 param: 123
               }
