@@ -2,8 +2,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import GoodsList from 'components/goods-list/';
-import PureGoodsList from 'components/pure-component/';
+// import GoodsList from 'components/goods-list/';
+// import PureGoodsList from 'components/pure-component/';
+import AsyncComponent from 'components/async-component/';
 
 import getNow, { getYear, getMinutes } from 'utils/date.js';
 
@@ -13,6 +14,19 @@ const { Fragment } = React;
 let rootInstance;
 
 class Demo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      listSwitch: false,
+    };
+
+    this.goodsList = AsyncComponent(() => {
+      return import('components/goods-list/');
+    });
+    this.pureGoodsList = AsyncComponent(() => {
+      return import('components/pure-component/');
+    });
+  }
   componentDidMount() {
     console.log(getNow());
 
@@ -20,21 +34,10 @@ class Demo extends React.Component {
     console.log(getMinutes())
   }
   render() {
+    const { listSwitch } = this.state;
     return (
       <div ref={(instance) => {console.log(instance)}}>
-        <GoodsList ref={(instance) => {
-          // stateless component ref 是不生效的
-          console.log(instance);
-        }}>
-          <li className="list-item">第1个商品</li>
-          <li className="list-item">第2个商品</li>
-          <li className="list-item">第3个商品</li>
-          <li className="list-item">第4个商品</li>
-          <li className="list-item">第5个商品</li>
-        </GoodsList>
-        <PureGoodsList ref={(instance) => {
-          console.log(instance);
-        }} />
+        { listSwitch ? this.goodsList : this.pureGoodsList }
       </div>
     );
   }
