@@ -14,6 +14,7 @@ var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlug
 // 打包插件
 var UglifyJsParallelPlugin = require('webpack-uglify-parallel');
 // var UglifyJSPlugin = require('uglifyjs-webpack-plugin')
+var ChunkManifestPlugin = require('chunk-manifest-webpack-plugin');
 
 // 自定义插件
 var MultipleHtmlPlugin = require('./plugin/multiple-html-webpack-plugin');
@@ -287,7 +288,8 @@ module.exports = function(env) {
       }),
       // 利用 webpack 3 的新特性 提升作用域 减少代码体积 提升代码执行性能
       new webpack.optimize.ModuleConcatenationPlugin(),
-      new MultipleHtmlPlugin()
+      new MultipleHtmlPlugin(),
+      new ChunkManifestPlugin()
     ]
   };
 
